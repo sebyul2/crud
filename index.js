@@ -4,10 +4,13 @@ const express = require('express')
 const wrap = require('express-async-wrap')
 const mongoose = require('mongoose')
 const config = require('config')
+const bodyParser = require('body-parser')
 const mongooseTimestamp = require('mongoose-timestamp')
 const userModel = require('./model/user-model')
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // api
 app.use('/', wrap(async (req, res) => {
@@ -15,8 +18,16 @@ app.use('/', wrap(async (req, res) => {
 }))
 
 app.put('/user', wrap(async (req, res) => {
+    // req : request(요청) 클라이언트가 보내는 요청 데이터
+
+    // const name = req.body.name
+    // const email = req.body.email
+    // const phone = req.body.phone
+    // const password = req.body.password
+    const { name, email, phone, password } = req.body
+
     const data = {
-        
+        name, email, phone, password
     }
     const user = await userModel.create(data)
     res.json(user)

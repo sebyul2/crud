@@ -1,12 +1,13 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 const collectionName = 'user'
 
 let userSchema = new mongoose.Schema({
+  name: {type : String, required: true},
   email: {type : String, required: true},
-  sequence: {type : Number, default: 0},
+  phone: {type : String, required: true},
+  password: {type : String, required: true}
 }, {
   collection: collectionName
 })
