@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "start": "node index.js",
     "db-local": "docker-compose -f docker/mongodb-local.yml up -d",
     "db-live": "docker-compose -f docker/mongodb.yml up -d",
     "db-local-down": "docker-compose -f docker/mongodb-local.yml down",
