@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const config = require('config')
 const bodyParser = require('body-parser')
 const mongooseTimestamp = require('mongoose-timestamp')
+const cors = require('cors')
 const userModel = require('./model/user-model')
 const customerModel = require('./model/customer-model')
 const noteModel = require('./model/note-model')
@@ -13,6 +14,7 @@ const noteModel = require('./model/note-model')
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
 
 // api
 //===================  user  =========================
@@ -25,11 +27,13 @@ app.put('/user', wrap(async (req, res) => {
     // const email = req.body.email
     // const phone = req.body.phone
     // const password = req.body.password
+    console.log(req.body)
     const { name, email, phone, password } = req.body
     const data = {
         name, email, phone, password
     }
     const user = await userModel.create(data)
+    console.log(user)
     res.json(user)
 }))
 
@@ -40,6 +44,9 @@ app.get('/user', wrap(async (req, res) => {
 
 app.post('/user', wrap(async (req, res) => {
     const { id, name, email, phone, password } = req.body
+
+    console.log(req.body)
+
     let data = {}
     if (name) data.name = name
     if (email) data.email = email
@@ -119,7 +126,7 @@ app.get('/note', wrap(async (req, res) => {
 }))
 
 app.post('/note', wrap(async (req, res) => {
-    const { title, content } = req.body
+    const { id, title, content } = req.body
     let data = {}
     if (title) data.title = title
     if (content) data.content = content
@@ -138,6 +145,12 @@ app.delete('/note', wrap(async (req, res) => {
     const note = await noteModel.deleteOne({ _id: id })
     // _id : mongoDB의 자동 생성 아이디
     // id : 사용자가 클라이언트에서 입력한 값 테스트시 id 사용
+    res.json(note)
+}))
+
+//모슨 삭제
+app.delete('/note/all', wrap(async (req, res) => {
+    const note = await noteModel.deleteMany()
     res.json(note)
 }))
 
